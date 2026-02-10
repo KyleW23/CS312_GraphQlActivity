@@ -1,22 +1,27 @@
 import { db } from './data';
 
-type FriendsType = {
-    zip: string;
-    weather: string;
-};
 interface WeatherInterface {
     zip: string;
     weather: string;
     tempC: string;
     tempF: string;
-    friends: FriendsType[];
+    friends: string[];
     wind: string;
 }
 
 export const resolvers = {
     Query: {
         weather: async (_: unknown, param: WeatherInterface) => {
-            return [db.find((item) => item.zip === param.zip)];
+            const localWeatherData = db.find((data) => data.zip === param.zip);
+
+            if (!localWeatherData) return [];
+
+            const friendsWeatherData = localWeatherData.friends.map(
+                (friendZip) => db.find((data) => data.zip === friendZip),
+            );
+
+            return [localWeatherData, ...friendsWeatherData];
+            // return [db.find((item) => item.zip === param.zip)];
         },
     },
     Mutation: {
