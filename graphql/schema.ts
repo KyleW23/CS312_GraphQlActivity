@@ -1,12 +1,18 @@
 import gql from 'graphql-tag';
 
 export const typeDefs = gql`
+    type FriendsType {
+        zip: String!
+        weather: String!
+    }
+
     type LocationWeatherType {
         zip: String!
         weather: String!
         tempC: String!
         tempF: String!
-        friends: [String]!
+        friends: [FriendsType]!
+        wind: String
     }
 
     input LocationWeatherInput {
@@ -15,6 +21,7 @@ export const typeDefs = gql`
         tempC: String
         tempF: String
         friends: [String]
+        wind: String
     }
 
     type Query {
